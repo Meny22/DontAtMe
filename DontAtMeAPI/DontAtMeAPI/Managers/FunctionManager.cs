@@ -36,5 +36,10 @@ namespace DontAtMeAPI.Managers
         {
             return databaseConnector.GetTopicById(id);
         }
+
+        public List<Category> GetAllCategories()
+        {
+            return databaseConnector.GetAllCategories();
+        }
     }
 }

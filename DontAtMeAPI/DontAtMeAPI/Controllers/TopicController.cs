@@ -39,5 +39,12 @@ namespace DontAtMeAPI.Controllers
         {
             manager.AddOpinionForTopic(id, opinion);
         }
+
+        [HttpPost]
+        [Route("api/topic")]
+        public void AddTopic([FromBody]Topic topic)
+        {
+            manager.AddTopic(topic);
+        }
     }
 }

@@ -36,10 +36,10 @@ namespace DontAtMeAPI.Database
         public void AddTopic(Topic topic)
         {
             MySqlCommand command = new MySqlCommand();
-            string query = "Insert into topics(title,data_created,category_id) Values(@title,@date,@category)";
+            string query = "Insert into topics(title,date_created,category_id) Values(@title,@date,@category)";
             command.Parameters.AddWithValue("@title", topic.topic_title);
             command.Parameters.AddWithValue("@date", topic.date_created);
-            command.Parameters.AddWithValue("@category", topic.Category);
+            command.Parameters.AddWithValue("@category", topic.Category.Id);
             command.Connection = conn;
             command.CommandText = query;
             command.ExecuteNonQuery();
@@ -86,18 +86,43 @@ namespace DontAtMeAPI.Database
 
         public List<Topic> GetTopics()
         {
+            List<Topic> dbTopics = new List<Topic>();
             MySqlCommand command = new MySqlCommand();
             string query = "SELECT * FROM topics";
             command.CommandText = query;
             command.Connection = conn;
             using (MySqlDataReader reader = command.ExecuteReader())
             {
-                while (reader.HasRows)
+                while (reader.Read())
                 {
-                    reader.NextResult();
+                    int topic_id = reader.GetInt32("topic_id");
+                    string topic_title = reader.GetString("title");
+                    string date = reader.GetString("date_created");
+                    Topic topic = new Topic(topic_title, date, new Category(0, "Test"), null);
+                    dbTopics.Add(topic);
                 }
             }
-            return null;
+            return dbTopics;
+        }
+
+        public List<Category> GetAllCategories()
+        {
+            MySqlCommand command = new MySqlCommand();
+            List<Category> categories = new List<Category>();
+            string query = "SELECT * FROM categories";
+            command.CommandText = query;
+            command.Connection = conn;
+            using(MySqlDataReader reader = command.ExecuteReader())
+            {
+                while(reader.Read())
+                {
+                    int category_id = reader.GetInt32("category_id");
+                    string category_name = reader.GetString("category_name");
+                    Category category = new Category(category_id, category_name);
+                    categories.Add(category);
+                }
+            }
+            return categories;
         }
 
         public Topic GetTopicById(int id)

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, StyleSheet, Text, View, ScrollView, Alert, ActivityIndicator, FlatList, Image, TextInput } from 'react-native';
 import { createStackNavigator, withNavigation } from 'react-navigation';
+var config = require('../config/config.js');
 
 class Opinion extends Component {
     render() {
@@ -21,7 +22,7 @@ class OpinionContainer extends Component {
         this.state = { isLoadingOpinions: true }
     }
     componentDidMount() {
-        return fetch('http://ec8ccc91.ngrok.io/api/topic/1/opinions', { method: 'GET' })
+        return fetch(config.apiURL+'/api/topic/1/opinions', { method: 'GET' })
             .then((response) => response.json())
             .then((responseJson) => {
                 this.setState({
@@ -79,7 +80,7 @@ class TopicContainer extends Component {
         this.state = { isLoadingTopic: true }
     }
     componentDidMount() {
-        return fetch('http://ec8ccc91.ngrok.io/api/topic/1', { method: 'GET' })
+        return fetch(config.apiURL+'/api/topic/1', { method: 'GET' })
             .then((response) => response.json())
             .then((responseJson) => {
                 this.setState({
